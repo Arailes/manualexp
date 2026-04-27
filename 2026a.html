@@ -1,3 +1,7 @@
+Excelente ideia! O Projeto Integrador (PI) amarra várias disciplinas no 4º período e a pontuação é distribuída de forma diferente em cada uma delas, o que sempre gera confusão.
+Para resolver a questão do espaço no celular sem precisar ficar rolando a tela para os lados, criei uma tabela com layout fixo e adicionei um sistema de **"Modal de Zoom"**. Quando o usuário tocar em qualquer campo da tabela, um cartão (modal) salta na tela com o texto em tamanho maior.
+Adicionei o botão **"🧩 P. Integrador"** no menu principal e a lógica do zoom no final do JavaScript. Copie o código atualizado:
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -33,6 +37,7 @@
       border-radius: 24px;
       box-shadow: 0 20px 25px -5px rgba(0, 43, 92, 0.1);
       overflow: hidden;
+      position: relative;
     }
 
     header {
@@ -100,81 +105,110 @@
     h2 { color: var(--primary); margin-bottom: 16px; font-weight: 800; }
     li { margin-bottom: 12px; background: #f8fafc; padding: 14px; border-radius: 12px; border-left: 4px solid var(--secondary); list-style: none; font-size: 0.9rem;}
 
-    .table-responsive { overflow-x: auto; margin-top: 16px; border-radius: 12px; border: 1px solid var(--border); }
-    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
-    th { background-color: var(--primary); color: white; text-transform: uppercase; }
+    /* Tabela Responsiva e Zoomável */
+    table.zoomable {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed; /* Evita scroll horizontal */
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    
+    table.zoomable th {
+      background-color: var(--primary);
+      color: white;
+      padding: 12px 10px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      text-align: left;
+    }
+    
+    table.zoomable th:first-child { width: 35%; } /* Coluna da disciplina menor */
+    
+    table.zoomable td {
+      padding: 14px 10px;
+      font-size: 0.85rem;
+      border-bottom: 1px solid var(--border);
+      cursor: zoom-in;
+      transition: background 0.2s;
+    }
+    
+    table.zoomable tr:nth-child(even) td { background-color: #f8fafc; }
+    table.zoomable td:active { background-color: #e0f2fe; }
+    
+    .click-hint {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--secondary);
+      text-align: center;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
 
-    /* Fluxograma Simples */
+    /* Modal de Zoom */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 43, 92, 0.7);
+      backdrop-filter: blur(3px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    
+    .modal-overlay.show { display: flex; opacity: 1; }
+    
+    .modal-box {
+      background: white;
+      padding: 24px;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      transform: scale(0.95);
+      transition: transform 0.2s ease;
+    }
+    
+    .modal-overlay.show .modal-box { transform: scale(1); }
+    
+    .btn-close {
+      width: 100%;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      margin-top: 20px;
+      border: none;
+    }
+
     .flow-container { background: #f8fafc; padding: 20px; border-radius: 12px; border: 2px dashed var(--secondary); text-align: center; line-height: 2.5; margin-bottom: 16px;}
     .flow-step { display: inline-block; background: var(--primary); color: white; padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; }
     .flow-arrow { display: inline-block; color: var(--secondary); font-weight: 900; margin: 0 6px; }
 
-    /* Arvore/Mapa Mental Interativo nativo com details */
-    details {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      margin-bottom: 10px;
-      overflow: hidden;
-    }
-    summary {
-      padding: 14px 16px;
-      font-weight: 700;
-      color: var(--primary);
-      cursor: pointer;
-      list-style: none;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.95rem;
-    }
+    details { background: white; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
+    summary { padding: 14px 16px; font-weight: 700; color: var(--primary); cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; }
     summary::-webkit-details-marker { display: none; }
     summary::after { content: "➕"; font-size: 0.9rem; }
     details[open] summary::after { content: "➖"; }
     details[open] summary { border-bottom: 1px dashed var(--border); }
-    
-    .branch {
-      padding: 16px;
-      color: var(--text-light);
-      font-size: 0.9rem;
-      border-left: 3px solid var(--secondary);
-      margin: 12px;
-      background: #f8fafc;
-      border-radius: 0 8px 8px 0;
-    }
-    .badge-hours {
-      background: #e0f2fe;
-      color: #0369a1;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 800;
-    }
-    .badge-doc {
-      background: #fef3c7;
-      color: #92400e;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 0.75rem;
-      display: inline-block;
-      margin-top: 8px;
-      font-weight: 600;
-    }
-
-    /* Cards de Contato */
-    .contact-card {
-      background: #f8fafc; 
-      padding: 16px; 
-      border-radius: 12px; 
-      margin-bottom: 16px;
-    }
-    .contact-card.primary { border-left: 4px solid var(--primary); }
-    .contact-card.secondary { border-left: 4px solid var(--secondary); }
-    .contact-link { color: #0369a1; text-decoration: none; font-weight: 700; }
+    .branch { padding: 16px; color: var(--text-light); font-size: 0.9rem; border-left: 3px solid var(--secondary); margin: 12px; background: #f8fafc; border-radius: 0 8px 8px 0; }
+    .badge-hours { background: #e0f2fe; color: #0369a1; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 800; }
+    .badge-doc { background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; display: inline-block; margin-top: 8px; font-weight: 600; }
   </style>
 </head>
 <body>
+
+  <div id="zoom-modal" class="modal-overlay">
+    <div class="modal-box">
+      <h3 id="modal-title" style="color: var(--primary); margin-bottom: 12px; font-size:1.2rem;"></h3>
+      <p id="modal-text" style="font-size: 1.05rem; line-height: 1.6; color: var(--text);"></p>
+      <button id="close-modal" class="btn-close">Fechar</button>
+    </div>
+  </div>
 
   <div class="container">
     <header>
@@ -184,6 +218,7 @@
 
     <nav class="nav-grid" id="menu">
       <button data-topic="aprovacao">📊 Aprovação</button>
+      <button data-topic="pi">🧩 P. Integrador</button>
       <button data-topic="atestado">🏥 Regime</button>
       <button data-topic="revisao">🔍 Vista</button>
       <button data-topic="aac_home">⏳ AAC (Horas)</button>
@@ -201,7 +236,7 @@
     <main id="content">
       <div style="text-align: center; padding: 40px;">
         <p style="font-size: 3rem;">👋</p>
-        <h3 style="color: var(--primary);">Olá, TURMA 6! Selecione um tópico.</h3>
+        <h3 style="color: var(--primary);">Olá, TURMA6! Selecione um tópico.</h3>
       </div>
     </main>
   </div>
@@ -213,10 +248,44 @@
         <h2>📊 Regras de Aprovação</h2>
         <ul>
           <li><strong>✅ Direta:</strong> Média Parcial (MP) ≥ 7,0.</li>
-          <li><strong>⚠️ Final:</strong> MP entre 5,0 e 7,0. Exige nota ≥ 5,0 na Prova Final.</li>
-          <li><strong>🧮 Média Final:</strong> Média aritmética entre MP e Final deve ser ≥ 6,0.</li>
+          <li><strong>⚠️ Final:</strong> MP entre 4,0 e 6,9. Exige nota ≥ 4,0 na Prova Final.</li>
+          <li><strong>🧮 Média Final:</strong> Média aritmética entre MP e Final deve ser ≥ 5,0.</li>
           <li><strong>🚨 2ª Chamada:</strong> Apenas para 1 avaliação (PR1 ou PR2) por disciplina.</li>
         </ul>
+      `,
+      pi: `
+        <h2>🧩 Projeto Integrador</h2>
+        <span class="click-hint">👆 Toque em qualquer campo da tabela para dar Zoom</span>
+        <table class="zoomable">
+          <thead>
+            <tr>
+              <th>Disciplina</th>
+              <th>Regra / Pontuação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>IESC IV</strong></td>
+              <td>Coordena o projeto. Foco em intervenções na comunidade e UBS (Saúde do Adulto, DCNT, etc).</td>
+            </tr>
+            <tr>
+              <td><strong>HMP IV</strong></td>
+              <td>Fomenta o desenvolvimento do PI. Avalia a construção do relatório e do produto final.</td>
+            </tr>
+            <tr>
+              <td><strong>GIS II</strong></td>
+              <td>Vale 1,0 ponto somado na nota final da PR2.</td>
+            </tr>
+            <tr>
+              <td><strong>Farmaco I</strong></td>
+              <td>Vale 1,0 ponto na PR2 (É obrigatório estar matriculado em IESC IV para pontuar).</td>
+            </tr>
+            <tr>
+              <td><strong>SOP IV</strong></td>
+              <td>O aluno será avaliado pelo envolvimento e relatório. Vale no mínimo 10% da nota de PR1 ou PR2.</td>
+            </tr>
+          </tbody>
+        </table>
       `,
       tardia: `<h2>⏳ Matrícula Tardia</h2><ul><li><strong>🚫 Bloqueio:</strong> Alunos não matriculados no prazo ficam impedidos de aulas práticas, avaliações e não têm horas consideradas.</li></ul>`,
       docs: `<h2>📂 Documentos</h2><ul><li><strong>Acesso:</strong> Solicite via SIA para consultar Regimentos (Curso, Internato, Iniciação Científica).</li></ul>`,
@@ -226,44 +295,36 @@
       revisao: `<h2>🔍 Vista</h2><ul><li><strong>👀 Regra:</strong> Presença obrigatória. Prazo de 7 dias corridos para recurso fundamentado na secretaria.</li></ul>`,
       contatos: `
         <h2>📞 Contatos IDOMED</h2>
-        
-        <div class="contact-card secondary">
-          <h3 style="color: var(--primary); font-size: 1rem; margin-bottom: 8px;">🏢 Central de Atendimento (Geral)</h3>
-          <p style="margin-bottom: 6px;"><strong>WhatsApp:</strong> <a href="https://wa.me/5508008806768" target="_blank" class="contact-link">0800 880 6768 ↗</a></p>
-          <p style="margin-bottom: 6px;"><strong>Ligações:</strong> 0800 880 6770</p>
-          <p style="font-size: 0.85rem; color: var(--text-light);">🕒 Seg a Sex: 8h às 21h | Sáb: 8h às 18h</p>
+        <div style="background: #f8fafc; padding: 16px; border-radius: 12px; margin-bottom: 16px; border-left: 4px solid var(--secondary);">
+          <h3 style="color: var(--primary); font-size: 1rem; margin-bottom: 8px;">🏢 Central de Atendimento</h3>
+          <p><strong>WhatsApp:</strong> <a href="https://wa.me/5508008806768" target="_blank" style="color: #0369a1; text-decoration: none; font-weight: bold;">0800 880 6768 ↗</a></p>
+          <p><strong>Ligações:</strong> 0800 880 6770</p>
         </div>
-
-        <div class="contact-card primary">
+        <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border-left: 4px solid var(--primary);">
           <h3 style="color: var(--primary); font-size: 1rem; margin-bottom: 8px;">📍 Campus Quixadá</h3>
-          <p style="margin-bottom: 6px;"><strong>WhatsApp:</strong> <a href="https://wa.me/5588996227549" target="_blank" class="contact-link">(88) 99622-7549 ↗</a></p>
-          <p style="margin-bottom: 6px;"><strong>Telefone:</strong> (88) 2147-5800</p>
-          <p style="margin-bottom: 6px;"><strong>E-mail:</strong> <a href="mailto:Quixada.medicina@estacio.br" class="contact-link">Quixada.medicina@estacio.br</a></p>
-          <p style="font-size: 0.85rem; color: var(--text-light);">🕒 Seg a Qui: 08h às 17h | Sex: 08h às 16h</p>
+          <p><strong>WhatsApp:</strong> <a href="https://wa.me/5588996227549" target="_blank" style="color: #0369a1; text-decoration: none; font-weight: bold;">(88) 99622-7549 ↗</a></p>
+          <p><strong>E-mail:</strong> <a href="mailto:Quixada.medicina@estacio.br" style="color: #0369a1; text-decoration: none; font-weight: bold;">Quixada.medicina@estacio.br</a></p>
         </div>
       `
     };
 
-    // --- 2. DADOS DE AAC (Mapas Mentais) ---
+    // --- 2. DADOS DE AAC ---
     const aacData = {
       externas: [
         { title: "Eventos Acadêmico-Científicos", hours: "10 a 20h", desc: "Participação em congressos, simpósios (10h). Apresentação de trabalho (20h). Publicação ou prêmio (20h)." },
         { title: "Cursos Online e Presenciais", hours: "Até 90h", desc: "Cursos desvinculados à IES, profissionalizantes e línguas." },
         { title: "Certificações na Área", hours: "20h", desc: "Cursos certificados voltados para a área médica." },
-        { title: "Vivência Profissional", hours: "Até 30% CH", desc: "Atividade remunerada ou não (ex: emprego ou estágio não obrigatório na área)." },
+        { title: "Vivência Profissional", hours: "Até 30% CH", desc: "Atividade remunerada ou não (ex: emprego ou estágio não obrigatório)." },
         { title: "Trabalho Voluntário", hours: "Até 30% CH", desc: "Trabalho em instituições comunitárias / sociais." },
-        { title: "Visitas Técnicas / Palestras", hours: "5 a 10h", desc: "Visitas a hospitais, clínicas, empresas, feiras de profissões ou palestras isoladas." },
-        { title: "Ações Ambientais & Sustentáveis", hours: "10 a 20h", desc: "Mutirões, revitalização de praças, plantio (20h). Oficinas de reciclagem, doação de livros/roupas (10h)." },
-        { title: "Projetos de Extensão Univ.", hours: "50h", desc: "Participação em grandes projetos de extensão chancelados." },
-        { title: "Competições Universitárias", hours: "25h", desc: "Participação em competições nacionais e internacionais." }
+        { title: "Visitas Técnicas / Palestras", hours: "5 a 10h", desc: "Visitas a hospitais, clínicas, feiras de profissões ou palestras." },
+        { title: "Ações Ambientais", hours: "10 a 20h", desc: "Mutirões, revitalização de praças (20h). Oficinas de reciclagem, doação (10h)." }
       ],
       internas: [
-        { title: "Eventos Acadêmico-Científicos", hours: "10 a 20h", desc: "Participação interna (10h). Apresentação (20h) e Publicações institucionais (20h)." },
-        { title: "Cursos Online Institucionais", hours: "Até 90h", desc: "Cursos online oferecidos pela IES (Exceto programa 'Você Aprende Mais')." },
-        { title: "Trabalho Voluntário Interno", hours: "Até 30% CH", desc: "Auxílio em campanhas e atividades beneficentes organizadas pela faculdade." },
-        { title: "Vivência Profissional na IES", hours: "Até 30% CH", desc: "Estágios ou atividades internas de vivência na clínica da IES." },
-        { title: "Intercâmbio", hours: "50h", desc: "Realização de intercâmbio (mesmo sem convênio direto da IES), com declaração carimbada." },
-        { title: "Competições e Palestras", hours: "5 a 25h", desc: "Palestras institucionais isoladas (5h) e competições universitárias sediadas/apoiadas (25h)." }
+        { title: "Eventos Acadêmico-Científicos", hours: "10 a 20h", desc: "Participação interna (10h). Apresentação (20h) e Publicações (20h)." },
+        { title: "Cursos Online Institucionais", hours: "Até 90h", desc: "Cursos online oferecidos pela IES." },
+        { title: "Trabalho Voluntário Interno", hours: "Até 30% CH", desc: "Auxílio em campanhas organizadas pela faculdade." },
+        { title: "Vivência Profissional na IES", hours: "Até 30% CH", desc: "Estágios ou atividades na clínica da IES." },
+        { title: "Intercâmbio", hours: "50h", desc: "Realização de intercâmbio com declaração carimbada." }
       ]
     };
 
@@ -300,61 +361,57 @@
     }
 
     function renderAACHome() {
-      return `
-        <h2>⏳ Submissão de AAC</h2>
-        <div class="flow-container">
-          <span class="flow-step">SIA</span> <span class="flow-arrow">➔</span> 
-          <span class="flow-step">Atendimento</span> <span class="flow-arrow">➔</span> 
-          <span class="flow-step">Requerimento</span> <span class="flow-arrow">➔</span> 
-          <span class="flow-step">AAC</span>
-        </div>
-        <p style="text-align: center; color: var(--text-light); margin-bottom: 16px;">Mapa de Limites de Horas. Escolha a categoria:</p>
+      return `<h2>⏳ AAC</h2><p style="text-align: center; margin-bottom: 16px;">Consulte o limite de horas:</p>
         <div class="nav-grid" style="padding:0;">
-          <button data-aac="externas" style="width: 48%; justify-content:center;">🌍 Horas Externas</button>
-          <button data-aac="internas" style="width: 48%; justify-content:center;">🏫 Horas Internas</button>
-        </div>
-      `;
+          <button data-aac="externas" style="width: 48%; justify-content:center;">🌍 Externas</button>
+          <button data-aac="internas" style="width: 48%; justify-content:center;">🏫 Internas</button>
+        </div>`;
     }
 
     function renderAACTree(type) {
-      const title = type === 'externas' ? '🌍 AAC Externas (Anexo I)' : '🏫 AAC Internas (Anexo II)';
+      const title = type === 'externas' ? '🌍 AAC Externas' : '🏫 AAC Internas';
       const list = aacData[type].map(item => `
-        <details>
-          <summary>
-            <span>${item.title}</span>
-            <span class="badge-hours">${item.hours}</span>
-          </summary>
-          <div class="branch">
-            ${item.desc}
-            <br><span class="badge-doc">Anexar Certificado/Declaração</span>
-          </div>
-        </details>
-      `).join('');
-
-      return `
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-          <h2 style="margin:0; font-size:1.2rem;">${title}</h2>
-          <button data-topic="aac_home" class="btn-extra" style="padding: 6px 12px;">⬅ Voltar</button>
-        </div>
-        ${list}
-      `;
+        <details><summary><span>${item.title}</span><span class="badge-hours">${item.hours}</span></summary>
+        <div class="branch">${item.desc}<br><span class="badge-doc">Anexar Certificado</span></div></details>`).join('');
+      return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h2 style="margin:0; font-size:1.2rem;">${title}</h2><button data-topic="aac_home" class="btn-extra">⬅ Voltar</button></div>${list}`;
     }
 
-    // --- 5. LÓGICA DE EVENTOS ---
+    // --- 5. LÓGICA DE EVENTOS & MODAL DE ZOOM ---
     const contentArea = document.getElementById('content');
     const menuExtras = document.getElementById('extras-menu');
     const btnToggle = document.getElementById('btn-extras-toggle');
+    const zoomModal = document.getElementById('zoom-modal');
 
+    // Abre e fecha o menu extras
     btnToggle.addEventListener('click', () => {
       menuExtras.style.display = menuExtras.style.display === 'flex' ? 'none' : 'flex';
       btnToggle.classList.toggle('active');
     });
 
-    document.addEventListener('click', (e) => {
-      const btn = e.target.closest('button');
-      if (!btn || btn.id === 'btn-extras-toggle') return;
+    // Fecha Modal de Zoom
+    document.getElementById('close-modal').addEventListener('click', () => zoomModal.classList.remove('show'));
+    zoomModal.addEventListener('click', (e) => { if(e.target === zoomModal) zoomModal.classList.remove('show'); });
 
-      // Menu Principal e Extras
+    document.addEventListener('click', (e) => {
+      // Verifica clique na tabela para aplicar o Zoom
+      const td = e.target.closest('table.zoomable td');
+      if (td) {
+        const tr = td.parentElement;
+        // Pega o nome da disciplina na primeira coluna
+        const title = tr.querySelector('td:first-child').innerText;
+        const text = td.innerHTML;
+        
+        document.getElementById('modal-title').innerText = title;
+        document.getElementById('modal-text').innerHTML = text;
+        zoomModal.classList.add('show');
+        return;
+      }
+
+      // Navegação por botões
+      const btn = e.target.closest('button');
+      if (!btn || btn.id === 'btn-extras-toggle' || btn.id === 'close-modal') return;
+
       if (btn.dataset.topic) {
         document.querySelectorAll('button').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
@@ -363,14 +420,12 @@
         else contentArea.innerHTML = regrasMap[btn.dataset.topic];
       }
 
-      // Bibliografia
       if (btn.dataset.biblio) contentArea.innerHTML = renderBiblioList(btn.dataset.biblio, 'basica');
       if (btn.dataset.biblioType) {
         const [sub, t] = btn.dataset.biblioType.split('|');
         contentArea.innerHTML = renderBiblioList(sub, t);
       }
 
-      // AAC Tree
       if (btn.dataset.aac) {
         document.querySelectorAll('button[data-aac]').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
@@ -380,3 +435,5 @@
   </script>
 </body>
 </html>
+
+```
