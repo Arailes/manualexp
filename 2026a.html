@@ -5,14 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hub do 4º Período - Estácio IDOMED</title>
   <style>
+    /* Nova Paleta de Cores: Tons de Verde Oliva */
     :root {
-      --primary: #002b5c; 
-      --secondary: #00b5cc; 
-      --background: #f0f9ff; 
+      --primary: #556B2F; /* Verde Oliva Escuro */
+      --secondary: #6B8E23; /* Verde Oliva Médio */
+      --background: #FDFDF2; /* Ivory Pálido (Quente) */
       --card-bg: #ffffff;
-      --text: #334155;
-      --text-light: #64748b;
-      --border: #e2e8f0;
+      --text: #334155; /* Mantido para legibilidade */
+      --text-light: #64748b; /* Mantido para legibilidade */
+      --border: #D3D3D3; /* Cinza Quente */
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, sans-serif; }
@@ -31,12 +32,14 @@
       max-width: 650px;
       background: var(--card-bg);
       border-radius: 24px;
-      box-shadow: 0 20px 25px -5px rgba(0, 43, 92, 0.1);
+      /* Sombra com tom de verde oliva */
+      box-shadow: 0 20px 25px -5px rgba(85, 107, 47, 0.1);
       overflow: hidden;
       position: relative;
     }
 
     header {
+      /* Gradiente de Verde Oliva */
       background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
       color: white;
       padding: 32px 24px;
@@ -46,7 +49,7 @@
     }
 
     h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 6px; }
-    p.subtitle { font-size: 1rem; color: #e0f2fe; }
+    p.subtitle { font-size: 1rem; color: #FDFDF2; }
 
     .nav-grid {
       display: flex;
@@ -63,7 +66,7 @@
       gap: 10px;
       padding: 10px 20px 24px 20px;
       flex-wrap: wrap;
-      background: #f1f5f9;
+      background: #EFEFEF; /* Cinza Quente Pálido */
       border-radius: 16px;
       margin-top: -10px;
     }
@@ -90,16 +93,17 @@
     }
     
     button.active {
+      /* Gradiente Ativo de Verde Oliva */
       background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
       color: white;
       border-color: transparent;
     }
 
-    .btn-extra { background-color: #e2e8f0; border-style: dashed; }
+    .btn-extra { background-color: #E2E2D3; border-style: dashed; }
 
     main { padding: 0 24px 32px 24px; }
     h2 { color: var(--primary); margin-bottom: 16px; font-weight: 800; }
-    li { margin-bottom: 12px; background: #f8fafc; padding: 14px; border-radius: 12px; border-left: 4px solid var(--secondary); list-style: none; font-size: 0.9rem;}
+    li { margin-bottom: 12px; background: #F1F5E1; padding: 14px; border-radius: 12px; border-left: 4px solid var(--secondary); list-style: none; font-size: 0.9rem;}
 
     /* Tabela Responsiva e Zoomável */
     table.zoomable {
@@ -130,8 +134,9 @@
       transition: background 0.2s;
     }
     
-    table.zoomable tr:nth-child(even) td { background-color: #f8fafc; }
-    table.zoomable td:active { background-color: #e0f2fe; }
+    /* Fundos de Tabela e Accordion em tom de verde oliva pálido */
+    table.zoomable tr:nth-child(even) td { background-color: #F1F5E1; }
+    table.zoomable td:active { background-color: #F1F5E1; }
     
     .click-hint {
       display: block;
@@ -146,7 +151,7 @@
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 43, 92, 0.7);
+      background: rgba(85, 107, 47, 0.7); /* Sombra oliva */
       backdrop-filter: blur(3px);
       display: none;
       align-items: center;
@@ -181,7 +186,8 @@
       border: none;
     }
 
-    .flow-container { background: #f8fafc; padding: 20px; border-radius: 12px; border: 2px dashed var(--secondary); text-align: center; line-height: 2.5; margin-bottom: 16px;}
+    /* Fluxograma e Ramificações com tom de verde oliva pálido */
+    .flow-container { background: #F1F5E1; padding: 20px; border-radius: 12px; border: 2px dashed var(--secondary); text-align: center; line-height: 2.5; margin-bottom: 16px;}
     .flow-step { display: inline-block; background: var(--primary); color: white; padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; }
     .flow-arrow { display: inline-block; color: var(--secondary); font-weight: 900; margin: 0 6px; }
 
@@ -191,8 +197,10 @@
     summary::after { content: "➕"; font-size: 0.9rem; }
     details[open] summary::after { content: "➖"; }
     details[open] summary { border-bottom: 1px dashed var(--border); }
-    .branch { padding: 16px; color: var(--text-light); font-size: 0.9rem; border-left: 3px solid var(--secondary); margin: 12px; background: #f8fafc; border-radius: 0 8px 8px 0; }
-    .badge-hours { background: #e0f2fe; color: #0369a1; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 800; }
+    .branch { padding: 16px; color: var(--text-light); font-size: 0.9rem; border-left: 3px solid var(--secondary); margin: 12px; background: #F1F5E1; border-radius: 0 8px 8px 0; }
+    
+    /* Badges com tons de verde oliva */
+    .badge-hours { background: #F1F5E1; color: #2E8B57; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 800; }
     .badge-doc { background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; display: inline-block; margin-top: 8px; font-weight: 600; }
   </style>
 </head>
@@ -232,7 +240,7 @@
     <main id="content">
       <div style="text-align: center; padding: 40px;">
         <p style="font-size: 3rem;">👋</p>
-        <h3 style="color: var(--primary);">Olá,TURMA6! Selecione um tópico.</h3>
+        <h3 style="color: var(--primary);">Olá, TURMA6! Selecione um tópico.</h3>
       </div>
     </main>
   </div>
@@ -284,22 +292,24 @@
         </table>
       `,
       tardia: `<h2>⏳ Matrícula Tardia</h2><ul><li><strong>🚫 Bloqueio:</strong> Alunos não matriculados no prazo ficam impedidos de aulas práticas, avaliações e não têm horas consideradas.</li></ul>`,
-      docs: `<h2>📂 Documentos</h2><ul><li><strong>Acesso:</strong> Solicite via href="https://sia.idomed.com.br/sianet/Logon" para consultar Regimentos (Curso, Internato, Iniciação Científica).</li></ul>`,
+      /* Link do SIA atualizado e estilizado com tom de verde oliva */
+      docs: `<h2>📂 Documentos</h2><ul><li><strong>Acesso:</strong> Solicite via <a href="https://sia.idomed.com.br/sianet/Logon" target="_blank" style="color: #2E8B57; text-decoration: none; font-weight: bold;">SIA ↗</a> para consultar Regimentos (Curso, Internato, Iniciação Científica).</li></ul>`,
       rep: `<h2>🤝 Representante</h2><ul><li><strong>Atuação:</strong> Representar turma nos Conselhos de Classe, atitude colaborativa e gestão de necessidades coletivas não burocráticas.</li></ul>`,
       atestado: `<h2>🏥 Regimes</h2><ul><li><strong>⏳ ESPECIAL:</strong> Atestado ≥ 7 dias. Abrir no SIA em 5 dias úteis. Práticas NÃO têm Regime Especial.</li><li><strong>🔄 DEPENDÊNCIA:</strong> Só reprovação por nota (MF ≥ 4,0). Máx 2 matérias por período, uma única vez.</li></ul>`,
       aac: `<h2>⏳ Passo a Passo AAC</h2><div class="flow-container"><span class="flow-step">SIA</span> <span class="flow-arrow">➔</span> <span class="flow-step">Atendimento</span> <span class="flow-arrow">➔</span> <span class="flow-step">Requerimento</span> <span class="flow-arrow">➔</span> <span class="flow-step">Novo</span> <span class="flow-arrow">➔</span> <span class="flow-step">AAC</span></div>`,
       revisao: `<h2>🔍 Vista</h2><ul><li><strong>👀 Regra:</strong> Presença obrigatória. Prazo de 7 dias corridos para recurso fundamentado na secretaria.</li></ul>`,
+      /* Links do WhatsApp e E-mail atualizados com tom de verde oliva */
       contatos: `
         <h2>📞 Contatos IDOMED</h2>
-        <div style="background: #f8fafc; padding: 16px; border-radius: 12px; margin-bottom: 16px; border-left: 4px solid var(--secondary);">
+        <div style="background: #F1F5E1; padding: 16px; border-radius: 12px; margin-bottom: 16px; border-left: 4px solid var(--secondary);">
           <h3 style="color: var(--primary); font-size: 1rem; margin-bottom: 8px;">🏢 Central de Atendimento</h3>
-          <p><strong>WhatsApp:</strong> <a href="https://wa.me/5508008806768" target="_blank" style="color: #0369a1; text-decoration: none; font-weight: bold;">0800 880 6768 ↗</a></p>
+          <p><strong>WhatsApp:</strong> <a href="https://wa.me/5508008806768" target="_blank" style="color: #2E8B57; text-decoration: none; font-weight: bold;">0800 880 6768 ↗</a></p>
           <p><strong>Ligações:</strong> 0800 880 6770</p>
         </div>
-        <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border-left: 4px solid var(--primary);">
+        <div style="background: #F1F5E1; padding: 16px; border-radius: 12px; border-left: 4px solid var(--primary);">
           <h3 style="color: var(--primary); font-size: 1rem; margin-bottom: 8px;">📍 Campus Quixadá</h3>
-          <p><strong>WhatsApp:</strong> <a href="https://wa.me/5588996227549" target="_blank" style="color: #0369a1; text-decoration: none; font-weight: bold;">(88) 99622-7549 ↗</a></p>
-          <p><strong>E-mail:</strong> <a href="mailto:Quixada.medicina@estacio.br" style="color: #0369a1; text-decoration: none; font-weight: bold;">Quixada.medicina@estacio.br</a></p>
+          <p><strong>WhatsApp:</strong> <a href="https://wa.me/5588996227549" target="_blank" style="color: #2E8B57; text-decoration: none; font-weight: bold;">(88) 99622-7549 ↗</a></p>
+          <p><strong>E-mail:</strong> <a href="mailto:Quixada.medicina@estacio.br" style="color: #2E8B57; text-decoration: none; font-weight: bold;">Quixada.medicina@estacio.br</a></p>
         </div>
       `
     };
