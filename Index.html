@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hub do 4º Período - Estácio IDOMED</title>
+  <style>
+    :root {
+      --primary: #002b5c; 
+      --secondary: #00b5cc; 
+      --background: #f0f9ff; 
+      --card-bg: #ffffff;
+      --text: #334155;
+      --text-light: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, sans-serif; }
+
+    body {
+      background-color: var(--background);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      padding: 16px;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 650px;
+      background: var(--card-bg);
+      border-radius: 24px;
+      box-shadow: 0 20px 25px -5px rgba(0, 43, 92, 0.1);
+      overflow: hidden;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      padding: 32px 24px;
+      text-align: center;
+      border-bottom-left-radius: 24px;
+      border-bottom-right-radius: 24px;
+    }
+
+    h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 6px; }
+    p.subtitle { font-size: 1rem; color: #e0f2fe; }
+
+    .nav-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      padding: 24px 20px;
+    }
+
+    .extras-container {
+      display: none; 
+      width: 100%;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px 20px 24px 20px;
+      flex-wrap: wrap;
+      background: #f1f5f9;
+      border-radius: 16px;
+      margin-top: -10px;
+    }
+
+    button {
+      background-color: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: 50px;
+      padding: 10px 18px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    button:hover {
+      border-color: var(--secondary);
+      color: var(--secondary);
+      transform: translateY(-2px);
+    }
+    
+    button.active {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      border-color: transparent;
+    }
+
+    .btn-extra { background-color: #e2e8f0; border-style: dashed; }
+
+    main { padding: 0 24px 32px 24px; }
+    h2 { color: var(--primary); margin-bottom: 16px; font-weight: 800; }
+    li { margin-bottom: 12px; background: #f8fafc; padding: 14px; border-radius: 12px; border-left: 4px solid var(--secondary); list-style: none; font-size: 0.9rem;}
+
+    .table-responsive { overflow-x: auto; margin-top: 16px; border-radius: 12px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { background-color: var(--primary); color: white; text-transform: uppercase; }
+
+    /* Fluxograma Simples */
+    .flow-container { background: #f8fafc; padding: 20px; border-radius: 12px; border: 2px dashed var(--secondary); text-align: center; line-height: 2.5; margin-bottom: 16px;}
+    .flow-step { display: inline-block; background: var(--primary); color: white; padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; }
+    .flow-arrow { display: inline-block; color: var(--secondary); font-weight: 900; margin: 0 6px; }
+
+    /* Arvore/Mapa Mental Interativo nativo com details */
+    details {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+    summary {
+      padding: 14px 16px;
+      font-weight: 700;
+      color: var(--primary);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.95rem;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "➕"; font-size: 0.9rem; }
+    details[open] summary::after { content: "➖"; }
+    details[open] summary { border-bottom: 1px dashed var(--border); }
+    
+    .branch {
+      padding: 16px;
+      color: var(--text-light);
+      font-size: 0.9rem;
+      border-left: 3px solid var(--secondary);
+      margin: 12px;
+      background: #f8fafc;
+      border-radius: 0 8px 8px 0;
+    }
+    .badge-hours {
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+    .badge-doc {
+      background: #fef3c7;
+      color: #92400e;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      display: inline-block;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+
+    /* Cards de Contato */
+    .contact-card {
+      background: #f8fafc; 
+      padding: 16px; 
+      border-radius: 12px; 
+      margin-bottom: 16px;
+    }
+    .contact-card.primary { border-left: 4px solid var(--primary); }
+    .contact-card.secondary { border-left: 4px solid var(--secondary); }
+    .contact-link { color: #0369a1; text-decoration: none; font-weight: 700; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>MANUAL EXPRESSO 🚀</h1>
+      <p class="subtitle">IDOMED • 4º Período</p>
+    </header>
+
+    <nav class="nav-grid" id="menu">
+      <button data-topic="aprovacao">📊 Aprovação</button>
+      <button data-topic="atestado">🏥 Regime</button>
+      <button data-topic="revisao">🔍 Vista</button>
+      <button data-topic="aac_home">⏳ AAC (Horas)</button>
+      <button data-topic="biblio_home">📚 Bibliografia</button>
+      <button id="btn-extras-toggle">➕ Extras</button>
+    </nav>
+
+    <div class="extras-container" id="extras-menu">
+      <button class="btn-extra" data-topic="docs">📂 Docs Consulta</button>
+      <button class="btn-extra" data-topic="rep">🤝 Representante</button>
+      <button class="btn-extra" data-topic="tardia">⏳ Matrícula Tardia</button>
+      <button class="btn-extra" data-topic="contatos">📞 Contatos</button>
+    </div>
+
+    <main id="content">
+      <div style="text-align: center; padding: 40px;">
+        <p style="font-size: 3rem;">👋</p>
+        <h3 style="color: var(--primary);">Olá, TURMA 6! Selecione um tópico.</h3>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // --- 1. DADOS DAS REGRAS GERAIS ---
+    const regrasMap = {
+      aprovacao: `
+        <h2>📊 Regras de Aprovação</h2>
+        <ul>
+          <li><strong>✅ Direta:</strong> Média Parcial (MP) ≥ 7,0.</li>
+          <li><strong>⚠️ Final:</strong> MP entre 5,0 e 7,0. Exige nota ≥ 5,0 na Prova Final.</li>
+          <li><strong>🧮 Média Final:</strong> Média aritmética entre MP e Final deve ser ≥ 6,0.</li>
+          <li><strong>🚨 2ª Chamada:</strong> Apenas para 1 avaliação (PR1 ou PR2) por disciplina.</li>
+        </ul>
+      `,
+      tardia: `<h2>⏳ Matrícula Tardia</h2><ul><li><strong>🚫 Bloqueio:</strong> Alunos não matriculados no prazo ficam impedidos de aulas práticas, avaliações e não têm horas consideradas.</li></ul>`,
+      docs: `<h2>📂 Documentos</h2><ul><li><strong>Acesso:</strong> Solicite via SIA para consultar Regimentos (Curso, Internato, Iniciação Científica).</li></ul>`,
+      rep: `<h2>🤝 Representante</h2><ul><li><strong>Atuação:</strong> Representar turma nos Conselhos de Classe, atitude colaborativa e gestão de necessidades coletivas não burocráticas.</li></ul>`,
+      atestado: `<h2>🏥 Regimes</h2><ul><li><strong>⏳ ESPECIAL:</strong> Atestado ≥ 7 dias. Abrir no SIA em 5 dias úteis. Práticas NÃO têm Regime Especial.</li><li><strong>🔄 DEPENDÊNCIA:</strong> Só reprovação por nota (MF ≥ 4,0). Máx 2 matérias por período, uma única vez.</li></ul>`,
+      aac: `<h2>⏳ Passo a Passo AAC</h2><div class="flow-container"><span class="flow-step">SIA</span> <span class="flow-arrow">➔</span> <span class="flow-step">Atendimento</span> <span class="flow-arrow">➔</span> <span class="flow-step">Requerimento</span> <span class="flow-arrow">➔</span> <span class="flow-step">Novo</span> <span class="flow-arrow">➔</span> <span class="flow-step">AAC</span></div>`,
+      revisao: `<h2>🔍 Vista</h2><ul><li><strong>👀 Regra:</strong> Presença obrigatória. Prazo de 7 dias corridos para recurso fundamentado na secretaria.</li></ul>`,
+      contatos: `
+        <h2>📞 Contatos IDOMED</h2>
+        
+        <div class="contact-card secondary">
+          <h3 style="color: var(--primary); font-size: 1rem; margin-bottom: 8px;">🏢 Central de Atendimento (Geral)</h3>
+          <p style="margin-bottom: 6px;"><strong>WhatsApp:</strong> <a href="https://wa.me/5508008806768" target="_blank" class="contact-link">0800 880 6768 ↗</a></p>
+          <p style="margin-bottom: 6px;"><strong>Ligações:</strong> 0800 880 6770</p>
+          <p style="font-size: 0.85rem; color: var(--text-light);">🕒 Seg a Sex: 8h às 21h | Sáb: 8h às 18h</p>
+        </div>
+
+        <div class="contact-card primary">
+          <h3 style="color: var(--primary); font-size: 1rem; margin-bottom: 8px;">📍 Campus Quixadá</h3>
+          <p style="margin-bottom: 6px;"><strong>WhatsApp:</strong> <a href="https://wa.me/5588996227549" target="_blank" class="contact-link">(88) 99622-7549 ↗</a></p>
+          <p style="margin-bottom: 6px;"><strong>Telefone:</strong> (88) 2147-5800</p>
+          <p style="margin-bottom: 6px;"><strong>E-mail:</strong> <a href="mailto:Quixada.medicina@estacio.br" class="contact-link">Quixada.medicina@estacio.br</a></p>
+          <p style="font-size: 0.85rem; color: var(--text-light);">🕒 Seg a Qui: 08h às 17h | Sex: 08h às 16h</p>
+        </div>
+      `
+    };
+
+    // --- 2. DADOS DE AAC (Mapas Mentais) ---
+    const aacData = {
+      externas: [
+        { title: "Eventos Acadêmico-Científicos", hours: "10 a 20h", desc: "Participação em congressos, simpósios (10h). Apresentação de trabalho (20h). Publicação ou prêmio (20h)." },
+        { title: "Cursos Online e Presenciais", hours: "Até 90h", desc: "Cursos desvinculados à IES, profissionalizantes e línguas." },
+        { title: "Certificações na Área", hours: "20h", desc: "Cursos certificados voltados para a área médica." },
+        { title: "Vivência Profissional", hours: "Até 30% CH", desc: "Atividade remunerada ou não (ex: emprego ou estágio não obrigatório na área)." },
+        { title: "Trabalho Voluntário", hours: "Até 30% CH", desc: "Trabalho em instituições comunitárias / sociais." },
+        { title: "Visitas Técnicas / Palestras", hours: "5 a 10h", desc: "Visitas a hospitais, clínicas, empresas, feiras de profissões ou palestras isoladas." },
+        { title: "Ações Ambientais & Sustentáveis", hours: "10 a 20h", desc: "Mutirões, revitalização de praças, plantio (20h). Oficinas de reciclagem, doação de livros/roupas (10h)." },
+        { title: "Projetos de Extensão Univ.", hours: "50h", desc: "Participação em grandes projetos de extensão chancelados." },
+        { title: "Competições Universitárias", hours: "25h", desc: "Participação em competições nacionais e internacionais." }
+      ],
+      internas: [
+        { title: "Eventos Acadêmico-Científicos", hours: "10 a 20h", desc: "Participação interna (10h). Apresentação (20h) e Publicações institucionais (20h)." },
+        { title: "Cursos Online Institucionais", hours: "Até 90h", desc: "Cursos online oferecidos pela IES (Exceto programa 'Você Aprende Mais')." },
+        { title: "Trabalho Voluntário Interno", hours: "Até 30% CH", desc: "Auxílio em campanhas e atividades beneficentes organizadas pela faculdade." },
+        { title: "Vivência Profissional na IES", hours: "Até 30% CH", desc: "Estágios ou atividades internas de vivência na clínica da IES." },
+        { title: "Intercâmbio", hours: "50h", desc: "Realização de intercâmbio (mesmo sem convênio direto da IES), com declaração carimbada." },
+        { title: "Competições e Palestras", hours: "5 a 25h", desc: "Palestras institucionais isoladas (5h) e competições universitárias sediadas/apoiadas (25h)." }
+      ]
+    };
+
+    // --- 3. DADOS DA BIBLIOGRAFIA ---
+    const biblioData = {
+      gis: { title: 'Gestão em Saúde (GIS II)', basica: ['FLETCHER. Epidemiologia clínica.', 'GORDIS. Epidemiologia.', 'MEDRONHO. Epidemiologia.'], comp: ['BRASIL. Caderno de Atenção Primária.', 'COCHRANE.'] },
+      hmp: { title: 'Humanidades (HMP IV)', basica: ['BRASIL. Psicologia médica.', 'MCWHINNEY. Medicina de família.'], comp: ['CFM. Código de ética.', 'BRASIL. PNAB.'] },
+      sop: { title: 'SOP IV', basica: ['HARRISON. Medicina Interna.', 'ROBBINS Patologia.', 'PORTO. Semiologia Médica.'], comp: ['BICKLEY. Bates - Propedêutica.', 'PORTH. Fisiopatologia.'] },
+      farmaco: { title: 'Farmacologia I', basica: ['Laurence L. Godman & Gilman.', 'KATZUNG. Farmacologia.'], comp: ['GOLAN. Princípios de farmacologia.', 'SILVA. Farmacologia.'] },
+      iesc: { title: 'IESC IV', basica: ['STEWART. Medicina centrada.', 'GUSSO. Tratado de Medicina de Família.'], comp: ['DUNCAN. Medicina ambulatorial.', 'RAMOS. Consulta em 7 passos.'] },
+      cirurgia: { title: 'Cirurgia e Anestesio', basica: ['BARASH. Anestesiologia Clínica.', 'SABISTON. Tratado de cirurgia.'], comp: [] },
+      mpe: { title: 'MPE IV', basica: ['ALEXANDRE. Metodologia científica.', 'PEREIRA. Escrita científica.'], comp: ['MATTAR. Metodologia científica digital.'] }
+    };
+
+    // --- 4. RENDERIZADORES ---
+    function renderBiblioHome() {
+      return `<h2>📚 Bibliografia</h2>
+        <div class="nav-grid" style="padding:0;">
+          <button data-biblio="gis">GIS II</button><button data-biblio="hmp">HMP IV</button><button data-biblio="sop">SOP IV</button>
+          <button data-biblio="farmaco">Farmaco I</button><button data-biblio="iesc">IESC IV</button><button data-biblio="cirurgia">Cirurgia</button>
+          <button data-biblio="mpe">MPE IV</button>
+        </div>`;
+    }
+
+    function renderBiblioList(subject, type) {
+      const data = biblioData[subject];
+      const listHTML = data[type].length > 0 ? data[type].map(i => `<li>${i}</li>`).join('') : `<li><em>Sem indicações.</em></li>`;
+      return `<h2 style="font-size:1.1rem; text-align:center;">📖 ${data.title}</h2>
+        <div class="nav-grid" style="padding:10px 0; gap:8px;">
+          <button data-biblio-type="${subject}|basica" class="${type === 'basica' ? 'active' : ''}">Básica</button>
+          <button data-biblio-type="${subject}|comp" class="${type === 'comp' ? 'active' : ''}">Complementar</button>
+          <button data-topic="biblio_home" class="btn-extra">⬅ Voltar</button>
+        </div><ul>${listHTML}</ul>`;
+    }
+
+    function renderAACHome() {
+      return `
+        <h2>⏳ Submissão de AAC</h2>
+        <div class="flow-container">
+          <span class="flow-step">SIA</span> <span class="flow-arrow">➔</span> 
+          <span class="flow-step">Atendimento</span> <span class="flow-arrow">➔</span> 
+          <span class="flow-step">Requerimento</span> <span class="flow-arrow">➔</span> 
+          <span class="flow-step">AAC</span>
+        </div>
+        <p style="text-align: center; color: var(--text-light); margin-bottom: 16px;">Mapa de Limites de Horas. Escolha a categoria:</p>
+        <div class="nav-grid" style="padding:0;">
+          <button data-aac="externas" style="width: 48%; justify-content:center;">🌍 Horas Externas</button>
+          <button data-aac="internas" style="width: 48%; justify-content:center;">🏫 Horas Internas</button>
+        </div>
+      `;
+    }
+
+    function renderAACTree(type) {
+      const title = type === 'externas' ? '🌍 AAC Externas (Anexo I)' : '🏫 AAC Internas (Anexo II)';
+      const list = aacData[type].map(item => `
+        <details>
+          <summary>
+            <span>${item.title}</span>
+            <span class="badge-hours">${item.hours}</span>
+          </summary>
+          <div class="branch">
+            ${item.desc}
+            <br><span class="badge-doc">Anexar Certificado/Declaração</span>
+          </div>
+        </details>
+      `).join('');
+
+      return `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <h2 style="margin:0; font-size:1.2rem;">${title}</h2>
+          <button data-topic="aac_home" class="btn-extra" style="padding: 6px 12px;">⬅ Voltar</button>
+        </div>
+        ${list}
+      `;
+    }
+
+    // --- 5. LÓGICA DE EVENTOS ---
+    const contentArea = document.getElementById('content');
+    const menuExtras = document.getElementById('extras-menu');
+    const btnToggle = document.getElementById('btn-extras-toggle');
+
+    btnToggle.addEventListener('click', () => {
+      menuExtras.style.display = menuExtras.style.display === 'flex' ? 'none' : 'flex';
+      btnToggle.classList.toggle('active');
+    });
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn || btn.id === 'btn-extras-toggle') return;
+
+      // Menu Principal e Extras
+      if (btn.dataset.topic) {
+        document.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (btn.dataset.topic === 'biblio_home') contentArea.innerHTML = renderBiblioHome();
+        else if (btn.dataset.topic === 'aac_home') contentArea.innerHTML = renderAACHome();
+        else contentArea.innerHTML = regrasMap[btn.dataset.topic];
+      }
+
+      // Bibliografia
+      if (btn.dataset.biblio) contentArea.innerHTML = renderBiblioList(btn.dataset.biblio, 'basica');
+      if (btn.dataset.biblioType) {
+        const [sub, t] = btn.dataset.biblioType.split('|');
+        contentArea.innerHTML = renderBiblioList(sub, t);
+      }
+
+      // AAC Tree
+      if (btn.dataset.aac) {
+        document.querySelectorAll('button[data-aac]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        contentArea.innerHTML = renderAACTree(btn.dataset.aac);
+      }
+    });
+  </script>
+</body>
+</html>
